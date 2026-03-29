@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Rita 🌷</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { overflow:hidden; width:100vw; height:100vh; }
+
+  #scene {
+    position:relative; width:100%; height:100%; overflow:hidden;
+    background: linear-gradient(180deg,
+      #87ceeb 0%, #b0e0ff 35%, #d4f0ff 55%,
+      #e8f8e8 75%, #c8e8a0 88%, #a0c860 100%);
+  }
+
+  /* SUN */
+  #sun {
+    position:absolute; top:6%; right:12%;
+    width:90px; height:90px;
+    background: radial-gradient(circle, #fff9c4 30%, #ffee58 60%, #ffd600 100%);
+    border-radius:50%;
+    box-shadow: 0 0 40px 20px #fff59d, 0 0 80px 40px rgba(255,214,0,0.4);
+    animation: sunPulse 3s ease-in-out infinite alternate;
+  }
+  @keyframes sunPulse {
+    from { box-shadow: 0 0 40px 20px #fff59d, 0 0 80px 40px rgba(255,214,0,0.3); }
+    to   { box-shadow: 0 0 60px 30px #fffde7, 0 0 120px 60px rgba(255,214,0,0.5); }
+  }
+  .ray {
+    position:absolute; top:50%; left:50%;
+    width:3px; height:40px; background:rgba(255,236,0,0.7);
+    border-radius:2px; transform-origin:top center;
+    animation: rayPulse 3s ease-in-out infinite alternate;
+  }
+  @keyframes rayPulse { from{opacity:0.5} to{opacity:1} }
+
+  /* CLOUDS */
+  .cloud {
+    position:absolute; background:white; border-radius:50px; opacity:0.88;
+    animation: drift var(--cd) linear var(--cstart) infinite;
+  }
+  @keyframes drift {
+    from { transform:translateX(-300px); }
+    to   { transform:translateX(calc(100vw + 300px)); }
+  }
+
+  /* GROUND */
+  #ground {
+    position:absolute; bottom:0; width:100%; height:32%;
+    background: linear-gradient(180deg, #5aaa20 0%, #3d8010 50%, #2a5a08 100%);
+    border-radius: 55% 55% 0 0 / 15% 15% 0 0;
+  }
+  #ground::after {
+    content:''; position:absolute; top:-8px; left:0; right:0; height:18px;
+    background: radial-gradient(ellipse, #76c442 0%, #5aaa20 60%, transparent 100%);
+    border-radius:50%;
+  }
+
+  /* TULIPS */
+  .tulip {
+    position:absolute; bottom:30%;
+    transform:translateX(-50%) scaleY(0);
+    transform-origin:bottom center;
+    animation:growUp 1.8s cubic-bezier(.22,1,.36,1) var(--td) forwards;
+    opacity:0;
+  }
+  @keyframes growUp {
+    0%  { transform:translateX(-50%) scaleY(0); opacity:0; }
+    20% { opacity:1; }
+    100%{ transform:translateX(-50%) scaleY(1); opacity:1; }
+  }
+
+  /* BUTTERFLIES */
+  .butterfly {
+    position:absolute; width:56px; height:38px;
+    opacity:0; pointer-events:none;
+    animation:flyOut var(--bdur) ease-out var(--bdelay) forwards;
+  }
+  .wing {
+    position:absolute; width:26px; height:20px;
+    border-radius:60% 60% 50% 50%; top:0;
+  }
+  .wing-left  { left:0; background:radial-gradient(ellipse at 65% 40%, var(--wc1), var(--wc2)); transform-origin:right center; animation:flapL 0.2s ease-in-out infinite alternate; }
+  .wing-right { right:0; background:radial-gradient(ellipse at 35% 40%, var(--wc1), var(--wc2)); transform-origin:left center; animation:flapR 0.2s ease-in-out infinite alternate; }
+  @keyframes flapL { from{transform:rotateY(0)scaleX(1)} to{transform:rotateY(55deg)scaleX(0.6)} }
+  @keyframes flapR { from{transform:rotateY(0)scaleX(1)} to{transform:rotateY(-55deg)scaleX(0.6)} }
+  .bbody { position:absolute; width:6px; height:22px; background:#333; border-radius:3px; left:50%; top:-1px; transform:translateX(-50%); }
+
+  @keyframes flyOut {
+    0%   { opacity:0; transform:translate(0,0) scale(0.2) rotate(0deg); bottom:44%; left:47%; }
+    8%   { opacity:1; }
+    40%  { opacity:1; transform:translate(var(--tx1),var(--ty1)) scale(1) rotate(var(--r1)); }
+    75%  { opacity:0.85; transform:translate(var(--tx2),var(--ty2)) scale(1.1) rotate(var(--r2)); }
+    100% { opacity:0; transform:translate(var(--tx3),var(--ty3)) scale(0.7) rotate(var(--r3)); }
+  }
+
+  /* SPARKS */
+  .spark {
+    position:absolute; width:5px; height:5px; border-radius:50%;
+    background:var(--sc); opacity:0;
+    animation:sparkFly 1.3s ease-out var(--sd) forwards;
+  }
+  @keyframes sparkFly {
+    0%   { opacity:1; transform:translate(0,0) scale(1); }
+    70%  { opacity:0.8; }
+    100% { opacity:0; transform:translate(var(--sx),var(--sy)) scale(0.2); }
+  }
+
+  /* MESSAGE */
+  #message {
+    position:absolute; top:7%; width:100%; text-align:center;
+    opacity:0;
+    animation:msgIn 1.4s cubic-bezier(.34,1.56,.64,1) 6.8s forwards;
+  }
+  @keyframes msgIn {
+    0%  { opacity:0; transform:scale(0.4) translateY(40px); }
+    65% { transform:scale(1.06) translateY(-6px); }
+    100%{ opacity:1; transform:scale(1) translateY(0); }
+  }
+  #message h1 {
+    font-family:'Pacifico',cursive;
+    font-size:clamp(1.8rem,6.5vw,4.8rem);
+    color:#fff;
+    text-shadow:
+      0 0 15px #ffcc00, 0 0 30px #ff8800, 0 0 60px #ffcc00,
+      3px 3px 0 #cc4400, -1px -1px 0 #aa3300;
+    line-height:1.2;
+  }
+  .rita-name {
+    font-family:'Pacifico',cursive;
+    font-size:clamp(2.4rem,9vw,6rem);
+    color:#ffe066; display:block; margin-top:4px;
+    text-shadow:0 0 20px #ff6600, 0 0 50px #ffaa00, 3px 3px 0 #cc2200;
+    animation:ritaPulse 1.8s ease-in-out 8.5s infinite alternate;
+  }
+  @keyframes ritaPulse {
+    from { text-shadow:0 0 20px #ff6600, 0 0 50px #ffaa00, 3px 3px 0 #cc2200; }
+    to   { text-shadow:0 0 40px #ffcc00, 0 0 80px #ffee44, 3px 3px 0 #cc2200; }
+  }
+  #message p {
+    font-family:'Dancing Script',cursive;
+    font-size:clamp(1rem,3.5vw,2rem); color:#fff8dc; margin-top:10px;
+    text-shadow:0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  /* PETALS */
+  .petal {
+    position:absolute; border-radius:50% 50% 50% 0; opacity:0;
+    animation:petalFall var(--pd) ease-in var(--pdelay) infinite;
+  }
+  @keyframes petalFall {
+    0%  { opacity:0; transform:translateY(-20px) rotate(0deg) scale(0); }
+    10% { opacity:0.9; transform:translateY(0) scale(1); }
+    80% { opacity:0.7; }
+    100%{ opacity:0; transform:translateY(200px) rotate(360deg) scale(0.5) translateX(var(--px)); }
+  }
+</style>
+</head>
+<body>
+<div id="scene">
+  <div id="sun"></div>
+  <div id="clouds"></div>
+  <div id="ground"></div>
+  <div id="tulips"></div>
+  <div id="butterflies"></div>
+  <div id="petals"></div>
+  <div id="fireworks"></div>
+  <div id="message">
+    <h1>🌷 Happy Birthday <span class="rita-name">Rita!</span></h1>
+    <p>✨ Wishing you sunshine, joy &amp; love! ✨</p>
+  </div>
+</div>
+
+<script>
+const W = window.innerWidth, H = window.innerHeight;
+const scene = document.getElementById('scene');
+
+// SUN RAYS
+const sun = document.getElementById('sun');
+for (let i = 0; i < 12; i++) {
+  const r = document.createElement('div');
+  r.className = 'ray';
+  r.style.cssText = `transform:translateX(-50%) rotate(${i*30}deg) translateY(-60px);animation-delay:${i*0.25}s`;
+  sun.appendChild(r);
+}
+
+// CLOUDS
+const cloudBox = document.getElementById('clouds');
+[
+  { top:8,  w:160, h:52, dur:30, start:-5 },
+  { top:15, w:110, h:40, dur:22, start:-12 },
+  { top:4,  w:200, h:62, dur:38, start:-20 },
+  { top:22, w:130, h:46, dur:26, start:-3 },
+].forEach(c => {
+  const cl = document.createElement('div');
+  cl.className = 'cloud';
+  cl.style.cssText = `top:${c.top}%;left:0;width:${c.w}px;height:${c.h}px;--cd:${c.dur}s;--cstart:${c.start}s;`;
+  ['40% 40% -40px 25%','35% 35% -30px 55%'].forEach((style,j) => {
+    const b = document.createElement('div');
+    const bw = j===0 ? c.h*0.95 : c.h*0.72;
+    const bt = j===0 ? -c.h*0.47 : -c.h*0.32;
+    const bl = j===0 ? c.w*0.2 : c.w*0.52;
+    b.style.cssText = `position:absolute;background:white;border-radius:50%;width:${bw}px;height:${bw}px;top:${bt}px;left:${bl}px;`;
+    cl.appendChild(b);
+  });
+  cloudBox.appendChild(cl);
+});
+
+// TULIPS
+const tulipDefs = [
+  { petal:'#e60000', inner:'#ff4444', center:'#ffe066', stemC:'#2e7d32' },
+  { petal:'#ffd600', inner:'#ffee58', center:'#fff9c4', stemC:'#388e3c' },
+  { petal:'#e60000', inner:'#ff3333', center:'#ffeb3b', stemC:'#2e7d32' },
+  { petal:'#ffc200', inner:'#ffd740', center:'#fff59d', stemC:'#43a047' },
+  { petal:'#dd0000', inner:'#ff5555', center:'#ffe066', stemC:'#1b5e20' },
+  { petal:'#ffcc00', inner:'#ffe066', center:'#fff9c4', stemC:'#388e3c' },
+  { petal:'#cc0000', inner:'#ee3333', center:'#ffeb3b', stemC:'#2e7d32' },
+  { petal:'#ffaa00', inner:'#ffcc44', center:'#fff59d', stemC:'#43a047' },
+];
+const positions = [6, 16, 27, 38, 50, 61, 72, 83, 93];
+const tulipBox = document.getElementById('tulips');
+
+positions.forEach((pct, i) => {
+  const c = tulipDefs[i % tulipDefs.length];
+  const delay = 0.15 + i * 0.32;
+  const th = 88 + Math.random()*60;
+  const sw = 52 + Math.random()*16;
+
+  const div = document.createElement('div');
+  div.className = 'tulip';
+  div.style.cssText = `left:${pct}%;--td:${delay}s;`;
+  div.innerHTML = `<svg width="${sw}" height="${th+38}" viewBox="0 0 56 ${th+38}" xmlns="http://www.w3.org/2000/svg">
+    <line x1="28" y1="${th+30}" x2="28" y2="26" stroke="${c.stemC}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M28 ${th*0.55} Q8 ${th*0.38} 10 ${th*0.2} Q20 ${th*0.32} 28 ${th*0.55}" fill="#56ab2f" opacity="0.93"/>
+    <path d="M28 ${th*0.38} Q48 ${th*0.22} 46 ${th*0.08} Q40 ${th*0.18} 28 ${th*0.38}" fill="#76c442" opacity="0.88"/>
+    <ellipse cx="16" cy="20" rx="12" ry="21" fill="${c.inner}" transform="rotate(-20,16,20)" opacity="0.78"/>
+    <ellipse cx="40" cy="20" rx="12" ry="21" fill="${c.inner}" transform="rotate(20,40,20)" opacity="0.78"/>
+    <ellipse cx="28" cy="15" rx="12" ry="22" fill="${c.petal}" opacity="1"/>
+    <ellipse cx="28" cy="13" rx="11" ry="20" fill="${c.petal}" transform="rotate(-13,28,13)" opacity="0.88"/>
+    <ellipse cx="28" cy="13" rx="11" ry="20" fill="${c.petal}" transform="rotate(13,28,13)" opacity="0.88"/>
+    <ellipse cx="28" cy="14" rx="9" ry="11" fill="${c.center}" opacity="0.88"/>
+    <ellipse cx="28" cy="11" rx="6" ry="7" fill="${c.center}" opacity="1"/>
+    <circle cx="25" cy="10" r="2" fill="#ff8f00" opacity="0.9"/>
+    <circle cx="28" cy="8"  r="2" fill="#ff8f00" opacity="0.9"/>
+    <circle cx="31" cy="10" r="2" fill="#ff8f00" opacity="0.9"/>
+  </svg>`;
+  tulipBox.appendChild(div);
+});
+
+// BUTTERFLIES — warm yellow/orange/red
+const bPalette = [
+  {wc1:'#ffee58',wc2:'#f57f17'},{wc1:'#ff8f00',wc2:'#e65100'},
+  {wc1:'#ffe082',wc2:'#ff6f00'},{wc1:'#fff176',wc2:'#fbc02d'},
+  {wc1:'#ffcc02',wc2:'#e53935'},{wc1:'#ff8a65',wc2:'#bf360c'},
+  {wc1:'#ffab40',wc2:'#e65100'},{wc1:'#fff59d',wc2:'#f9a825'},
+  {wc1:'#ff7043',wc2:'#b71c1c'},{wc1:'#ffd54f',wc2:'#ff6d00'},
+  {wc1:'#ffe57a',wc2:'#ff3d00'},{wc1:'#ffca28',wc2:'#c62828'},
+];
+const bBox = document.getElementById('butterflies');
+for (let i = 0; i < 24; i++) {
+  const bc = bPalette[i % bPalette.length];
+  const b = document.createElement('div');
+  b.className = 'butterfly';
+  const delay = 1.5 + i*0.17 + Math.random()*0.22;
+  const dur = 3.2 + Math.random()*2;
+  const angle = (Math.PI*2*i/24) + (Math.random()-.5)*0.5;
+  const d1=70+Math.random()*50, d2=160+Math.random()*110, d3=270+Math.random()*140;
+  const tx1=Math.cos(angle)*d1+(Math.random()-.5)*50, ty1=Math.sin(angle)*d1-Math.random()*50;
+  const tx2=Math.cos(angle)*d2+(Math.random()-.5)*70, ty2=Math.sin(angle)*d2-Math.random()*90;
+  const tx3=Math.cos(angle)*d3+(Math.random()-.5)*90, ty3=Math.sin(angle)*d3-Math.random()*110;
+  b.style.cssText = `--wc1:${bc.wc1};--wc2:${bc.wc2};--bdur:${dur}s;--bdelay:${delay}s;
+    --tx1:${tx1}px;--ty1:${ty1}px;--tx2:${tx2}px;--ty2:${ty2}px;--tx3:${tx3}px;--ty3:${ty3}px;
+    --r1:${(Math.random()-.5)*50}deg;--r2:${(Math.random()-.5)*70}deg;--r3:${(Math.random()-.5)*90}deg;
+    bottom:44%;left:47%;`;
+  b.innerHTML = `<div class="wing wing-left" style="animation-delay:${Math.random()*.12}s"></div>
+    <div class="wing wing-right" style="animation-delay:${Math.random()*.12}s"></div>
+    <div class="bbody"></div>`;
+  bBox.appendChild(b);
+}
+
+// FALLING PETALS
+const petalBox = document.getElementById('petals');
+['#ff4444','#ffd600','#ffaa00','#ff6600','#ffee58'].forEach((col, ci) => {
+  for (let i = 0; i < 4; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const sz = 8 + Math.random()*10;
+    p.style.cssText = `width:${sz}px;height:${sz}px;background:${col};
+      left:${Math.random()*95}%;top:${Math.random()*55}%;
+      --pd:${4+Math.random()*4}s;--pdelay:${5+Math.random()*7}s;--px:${(Math.random()-.5)*80}px;`;
+    petalBox.appendChild(p);
+  }
+});
+
+// FIREWORKS — triggered after message appears (~7s)
+const fwBox = document.getElementById('fireworks');
+const fwPalette = ['#ffd600','#ff6600','#ff1744','#ffea00','#ff9100','#ff3d00','#ffcc00','#e53935','#ffffff','#ffe57a','#ff6d00','#ff8f00'];
+
+function burst(x, y, delayS) {
+  const fw = document.createElement('div');
+  fw.style.cssText = `position:absolute;left:${x}px;top:${y}px;pointer-events:none;`;
+  const n = 32 + Math.floor(Math.random()*16);
+  for (let i = 0; i < n; i++) {
+    const sp = document.createElement('div');
+    sp.className = 'spark';
+    const angle = (2*Math.PI*i/n) + Math.random()*0.14;
+    const dist = 55 + Math.random()*90;
+    const sx = Math.cos(angle)*dist, sy = Math.sin(angle)*dist;
+    const col = fwPalette[Math.floor(Math.random()*fwPalette.length)];
+    // size variation
+    const sz = 4 + Math.random()*4;
+    sp.style.cssText = `--sc:${col};--sx:${sx}px;--sy:${sy}px;--sd:${delayS}s;width:${sz}px;height:${sz}px;`;
+    fw.appendChild(sp);
+  }
+  fwBox.appendChild(fw);
+  setTimeout(() => {
+    if (fwBox.contains(fw)) fwBox.removeChild(fw);
+    burst(W*(0.06+Math.random()*0.88), H*(0.03+Math.random()*0.48), 0);
+  }, (delayS + 1.6)*1000);
+}
+
+[
+  {x:W*0.12,y:H*0.10,d:7.2},{x:W*0.50,y:H*0.06,d:7.8},
+  {x:W*0.85,y:H*0.12,d:8.3},{x:W*0.28,y:H*0.19,d:8.8},
+  {x:W*0.72,y:H*0.15,d:9.3},{x:W*0.50,y:H*0.26,d:9.8},
+  {x:W*0.18,y:H*0.08,d:10.2},{x:W*0.82,y:H*0.21,d:10.7},
+].forEach(fw => burst(fw.x, fw.y, fw.d));
+</script>
+</body>
+</html>
